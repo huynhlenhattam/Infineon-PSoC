@@ -1,40 +1,56 @@
 /* ========================================
  *
  * Huynh Le Nhat Tam
- * Date: 4th April 2022
+ * Date: 5th April 2022
  * ========================================
 */
 #include "project.h"
-#include "stdio.h"
+CY_ISR_PROTO(myBUTTONisr);
 
-char cVal; //int can also be used
-char sMyName[20] = "Nhat Tam\n\r"; //20: maximum number of characters in the string
-int counter = 0 ; //Initialize the software counter
-char count[20];
-
+uint8 flag = 0;
+uint16 val = 19000; //This value corresponds to the angle of the servo (Compare type: Greater => 19000 LOW, 1000 HIGH => 90 degree to the right)
+uint16 x = 19000;  //This variable is introduced to make the transition from each angle smooth
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
-
+    
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    
-    UART_Start();
-    UART_PutString(sMyName);
-    
-    BLUE_Write(1); //LED is on
-    
+    Clock_1_Start();
+    PWM_1_Start();
+    PWM_1_WriteCompare(val); //write the compare value
+    isr_BUTTON_StartEx(myBUTTONisr);
     for(;;)
     {
         /* Place your application code here. */
-        cVal = BUTTON_Read();
-        BLUE_Write(cVal); //LED is on
-        CyDelay(2000); //wait
-        BLUE_Write(0); //LED is off
-        CyDelay(2000); //wait
-        counter += 1; //increment the counter after each LED blink
-        sprintf (count,"Counter: %d \n\r",counter); //Assign the value of counter to the the string count (%d for int)
-        UART_PutString(count);
+        if (flag == 1)
+        {
+           val = val - 250;
+            while( x != val)
+            { 
+                x = x - 1;
+                PWM_1_WriteCompare(x); //write the compare value
+            }
+           
+           if (val < 18000) 
+           {val = 19000;} //prevent the value of val from getting too small (Choose the compare mode Greater => the smaller the compare value is, the larger the angle that the servo rotates)
+           flag = 0;
+            
+
+            
+        
+        }
     }
+        
 }
 
+//ISR for BUTTON
+CY_ISR(myBUTTONisr)
+{
+  
+//  set a flag that this interrupt is served 
+    flag = 1;
+//  Clear interrupt source
+   
+  BUTTON_ClearInterrupt();
+}
 /* [] END OF FILE */
