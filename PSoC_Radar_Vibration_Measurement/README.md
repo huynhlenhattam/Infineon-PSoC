@@ -1,2 +1,2 @@
 # Vibrational Frequency Measurement System using HB100 radar sensor and PSoC 5LP
-FFT from ARM CMSIS-DSP library is implemented on PSoC 5LP, which receives sampled and quantized data from the radar sensor through ADC components on the PSoC.
+The vibration is measured by the HB100 Doppler radar sensor. The analog waveform from the sensor is sampled and quantized by ADC and analyzed by FFT from ARM CMSIS-DSP library, which are both implemented on PSoC 5LP. The strongest frequency component is displayed on the LCD. This project can also be used for speed measurement.
