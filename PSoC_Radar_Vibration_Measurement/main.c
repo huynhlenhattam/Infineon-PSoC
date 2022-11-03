@@ -82,14 +82,6 @@ int32_t main(void)
         /* Calculate maxValue and return corresponding frequency bin value */
         arm_max_f32(mag, fftSize/2 + 1, &maxValue, &testIndex);   
         
-        //print out the array
-//                UART_1_PutString("Array: \r\n");
-//                int k = 0;
-//                for (k = 0; k < TEST_LENGTH_SAMPLES/2; k++)
-//                {
-//                    sprintf(uart_array, " Amp: %f, Freq: %d \r\n", mag[k], k);
-//                    UART_1_PutString(uart_array);
-//                }
         
         while(testIndex < cutoff) // this while loop acts as a high-pass filter
         {
@@ -103,44 +95,30 @@ int32_t main(void)
         sprintf(uartout, "Frequency: %u Hz \r\n", testIndex);
         UART_1_PutString(uartout);
         
-        /* For vibrational frequency measurement*/
-       
-        LCD_1_ClearDisplay(); //Clear the old displayed value
-        LCD_1_Position(0,0);
-        LCD_1_PrintString("Freq:");
-        LCD_1_Position(0,10);
-        LCD_1_PrintU32Number(testIndex);
-        LCD_1_Position(0, 14);
-        LCD_1_PrintString("Hz");
-        LCD_1_Position(1, 0);
-        LCD_1_PrintString("Cutoff:");
-        LCD_1_Position(1,10);
-        LCD_1_PrintU32Number(cutoff);
-        LCD_1_Position(1, 14);
-        LCD_1_PrintString("Hz");
+        
         
         /* For speed measurement*/
-//          LCD_1_ClearDisplay(); //Clear the old displayed value
-//          LCD_1_Position(0,0);
-//          LCD_1_PrintString("F:"); // Frequency
-//          LCD_1_Position(0,2);
-//          LCD_1_PrintU32Number(testIndex);
-//          LCD_1_Position(0,6);
-//          LCD_1_PrintString("Hz");
-//          LCD_1_Position(0,8);
-//          LCD_1_PrintString(",");
-//          LCD_1_Position(0,9);
-//          LCD_1_PrintString("C:"); // Cutoff
-//          LCD_1_Position(0,11);
-//          LCD_1_PrintU32Number(cutoff);
-//          LCD_1_Position(0,14);       
-//          LCD_1_PrintString("Hz");
-//          LCD_1_Position(1,0); 
-//          LCD_1_PrintString("Speed:");
-//          LCD_1_Position(1,7);
-//          LCD_1_PrintU32Number(speed);
-//          LCD_1_Position(1,11);
-//          LCD_1_PrintString("km/h");
+          LCD_1_ClearDisplay(); //Clear the old displayed value
+          LCD_1_Position(0,0);
+          LCD_1_PrintString("F:"); // Frequency
+          LCD_1_Position(0,2);
+          LCD_1_PrintU32Number(testIndex);
+          LCD_1_Position(0,6);
+          LCD_1_PrintString("Hz");
+          LCD_1_Position(0,8);
+          LCD_1_PrintString(",");
+          LCD_1_Position(0,9);
+          LCD_1_PrintString("C:"); // Cutoff
+          LCD_1_Position(0,11);
+          LCD_1_PrintU32Number(cutoff);
+          LCD_1_Position(0,14);       
+          LCD_1_PrintString("Hz");
+          LCD_1_Position(1,0); 
+          LCD_1_PrintString("Speed:");
+          LCD_1_Position(1,7);
+          LCD_1_PrintU32Number(speed);
+          LCD_1_Position(1,11);
+          LCD_1_PrintString("km/h");
         
         i = 0; // Let i = 0 in order to start a new array for the next waveform
       }
